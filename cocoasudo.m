@@ -24,29 +24,30 @@
 #include <Security/Authorization.h>
 #include <Security/AuthorizationTags.h>
 
-char *addfiletopath(const char *path, const char *filename)
-{
+char *addFileToPath(const char *path, const char *filename) {
 	char *outbuf;
 	char *lc;
 
 	lc = (char *)path + strlen(path) - 1;
-	if (lc < path || *lc != '/')
-	{
+	
+    if (lc < path || *lc != '/') {
 		lc = NULL;
 	}
-	while (*filename == '/')
-	{
+    
+	while (*filename == '/') {
 		filename++;
 	}
+    
 	outbuf = malloc(strlen(path) + strlen(filename) + 1 + (lc == NULL ? 1 : 0));
-	sprintf(outbuf, "%s%s%s", path, (lc == NULL) ? "/" : "", filename);
+	
+    sprintf(outbuf, "%s%s%s", path, (lc == NULL) ? "/" : "", filename);
 	
 	return outbuf;
 }
 
-int isexecfile(const char *name)
-{
+int isExecFile(const char *name) {
 	struct stat s;
+    
 	return (!access(name, X_OK) && !stat(name, &s) && S_ISREG(s.st_mode));
 }
 
@@ -55,38 +56,42 @@ char *which(const char *filename)
 	char *path, *p, *n;
 	
 	path = getenv("PATH");
-	if (!path)
-	{
+	
+    if (!path) {
 		return NULL;
 	}
 
 	p = path = strdup(path);
-	while (p) {
+	
+    while (p) {
 		n = strchr(p, ':');
-		if (n)
-		{
+		
+        if (n) {
 			*n++ = '\0';
 		}
-		if (*p != '\0')
-		{
-			p = addfiletopath(p, filename);
-			if (isexecfile(p))
-			{
+        
+		if (*p != '\0') {
+			p = addFileToPath(p, filename);
+            
+			if (isExecFile(p)) {
 				free(path);
-				return p;
+				
+                return p;
 			}
+            
 			free(p);
 		}
+        
 		p = n;
 	}
+    
 	free(path);
-	return NULL;
+	
+    return NULL;
 }
 
-int cocoasudo(char *executable, char *commandArgs[], char *icon, char *prompt)
-{
+int cocoaSudo(char *executable, char *commandArgs[], char *icon, char *prompt) {
 	int retVal = 1;
-	
 	OSStatus status;
 	AuthorizationRef authRef;
 	
@@ -95,10 +100,10 @@ int cocoasudo(char *executable, char *commandArgs[], char *icon, char *prompt)
 	
 	AuthorizationEnvironment myAuthorizationEnvironment;
 	AuthorizationItem kAuthEnv[2];
-	myAuthorizationEnvironment.items = kAuthEnv;
 	
-	if (prompt && icon)
-	{
+    myAuthorizationEnvironment.items = kAuthEnv;
+	
+	if (prompt && icon) {
 		kAuthEnv[0].name = kAuthorizationEnvironmentPrompt;
 		kAuthEnv[0].valueLength = strlen(prompt);
 		kAuthEnv[0].value = prompt;
@@ -111,8 +116,7 @@ int cocoasudo(char *executable, char *commandArgs[], char *icon, char *prompt)
 		
 		myAuthorizationEnvironment.count = 2;
 	}
-	else if (prompt)
-	{
+	else if (prompt) {
 		kAuthEnv[0].name = kAuthorizationEnvironmentPrompt;
 		kAuthEnv[0].valueLength = strlen(prompt);
 		kAuthEnv[0].value = prompt;
@@ -120,8 +124,7 @@ int cocoasudo(char *executable, char *commandArgs[], char *icon, char *prompt)
 		
 		myAuthorizationEnvironment.count = 1;
 	}
-	else if (icon)
-	{
+	else if (icon) {
 		kAuthEnv[0].name = kAuthorizationEnvironmentIcon;
 		kAuthEnv[0].valueLength = strlen(icon);
 		kAuthEnv[0].value = icon;
@@ -129,26 +132,20 @@ int cocoasudo(char *executable, char *commandArgs[], char *icon, char *prompt)
 		
 		myAuthorizationEnvironment.count = 1;
 	}
-	else
-	{
+	else {
 		myAuthorizationEnvironment.count = 0;
 	}
 	
-	if (AuthorizationCreate(NULL, &myAuthorizationEnvironment/*kAuthorizationEmptyEnvironment*/, kAuthorizationFlagDefaults, &authRef) != errAuthorizationSuccess)
-	{
+	if (AuthorizationCreate(NULL, &myAuthorizationEnvironment, kAuthorizationFlagDefaults, &authRef) != errAuthorizationSuccess) {
 		NSLog(@"Could not create authorization reference object.");
+        
 		status = errAuthorizationBadAddress;
 	}
-	else
-	{
-		status = AuthorizationCopyRights(authRef, &rightSet, &myAuthorizationEnvironment/*kAuthorizationEmptyEnvironment*/, 
-										 kAuthorizationFlagDefaults | kAuthorizationFlagPreAuthorize
-										 | kAuthorizationFlagInteractionAllowed | kAuthorizationFlagExtendRights,
-										 NULL);
+	else {
+		status = AuthorizationCopyRights(authRef, &rightSet, &myAuthorizationEnvironment, kAuthorizationFlagDefaults | kAuthorizationFlagPreAuthorize | kAuthorizationFlagInteractionAllowed | kAuthorizationFlagExtendRights, NULL);
 	}
 
-	if (status == errAuthorizationSuccess)
-	{
+	if (status == errAuthorizationSuccess) {
 		FILE *ioPipe;
 		char buffer[1024];
 		int bytesRead;
@@ -156,53 +153,57 @@ int cocoasudo(char *executable, char *commandArgs[], char *icon, char *prompt)
 		status = AuthorizationExecuteWithPrivileges(authRef, executable, 0, commandArgs, &ioPipe);
 
 		/* Just pipe processes' stdout to our stdout for now; hopefully can add stdin pipe later as well */
-		for (;;)
-		{
+		
+        for (;;) {
 			bytesRead = fread(buffer, sizeof(char), 1024, ioPipe);
-			if (bytesRead < 1) break;
-			write(STDOUT_FILENO, buffer, bytesRead * sizeof(char));
+			
+            if (bytesRead < 1) {
+                break;
+            }
+			
+            write(STDOUT_FILENO, buffer, bytesRead * sizeof(char));
 		}
 		
 		pid_t pid;
 		int pidStatus;
+        
 		do {
 			pid = wait(&pidStatus);
-		} while (pid != -1);
+		} 
+        while (pid != -1);
 		
-		if (status == errAuthorizationSuccess)
-		{
+        if (status == errAuthorizationSuccess) {
 			retVal = 0;
 		}
 	}
-	else
-	{
+	else {
 		AuthorizationFree(authRef, kAuthorizationFlagDestroyRights);
 		authRef = NULL;
-		if (status != errAuthorizationCanceled)
-		{
+		
+        if (status != errAuthorizationCanceled) {
 			// pre-auth failed
-			NSLog(@"Pre-auth failed");
+			
+            NSLog(@"Pre-auth failed");
 		}
 	}
 	
 	return retVal;
 }
 
-void usage(char *appNameFull)
-{
+void usage(char *appNameFull) {
 	char *appName = strrchr(appNameFull, '/');
-	if (appName == NULL)
-	{
+    
+	if (appName == NULL) {
 		appName = appNameFull;
 	}
 	else {
 		appName++;
 	}
+    
 	fprintf(stderr, "usage: %s [--icon=icon.tiff] [--prompt=prompt...] command\n  --icon=[filename]: optional argument to specify a custom icon\n  --prompt=[prompt]: optional argument to specify a custom prompt\n", appName);
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
 	int retVal = 1;
@@ -210,59 +211,58 @@ int main(int argc, char *argv[])
 	char *icon = NULL;
 	char *prompt = NULL;
 
-	for (; programArgsStartAt < argc; programArgsStartAt++)
-	{
-		if (!strncmp("--icon=", argv[programArgsStartAt], 7))
-		{
+	for (; programArgsStartAt < argc; programArgsStartAt++) {
+		if (!strncmp("--icon=", argv[programArgsStartAt], 7)) {
 			icon = argv[programArgsStartAt] + 7;
 		}
-		else if (!strncmp("--prompt=", argv[programArgsStartAt], 9))
-		{
+		else if (!strncmp("--prompt=", argv[programArgsStartAt], 9)) {
 			prompt = argv[programArgsStartAt] + 9;
-			size_t promptLen = strlen(prompt);
+			
+            size_t promptLen = strlen(prompt);
 			char *newPrompt = malloc(sizeof(char) * (promptLen + 2));
+            
 			strcpy(newPrompt, prompt);
-			newPrompt[promptLen] = '\n';
+			
+            newPrompt[promptLen] = '\n';
 			newPrompt[promptLen + 1] = '\n';
 			newPrompt[promptLen + 2] = '\0';
-			prompt = newPrompt;
+			
+            prompt = newPrompt;
 		}
-		else
-		{
+		else {
 			break;
 		}
 	}
 
-	if (programArgsStartAt >= argc)
-	{
+	if (programArgsStartAt >= argc) {
 		usage(argv[0]);
 	}
-	else
-	{
+	else {
 		char *executable;
 
-		if (strchr(argv[programArgsStartAt], '/'))
-		{
-			executable = isexecfile(argv[programArgsStartAt]) ? strdup(argv[programArgsStartAt]) : NULL;
+		if (strchr(argv[programArgsStartAt], '/')) {
+			executable = isExecFile(argv[programArgsStartAt]) ? strdup(argv[programArgsStartAt]) : NULL;
 		}
-		else
-		{
+		else {
 			executable = which(argv[programArgsStartAt]);
 		}
 
-		if (executable)
-		{
+		if (executable) {
 			char **commandArgs = malloc((argc - programArgsStartAt) * sizeof(char**));
-			memcpy(commandArgs, argv + programArgsStartAt + 1, (argc - programArgsStartAt - 1) * sizeof(char**));
-			commandArgs[argc - programArgsStartAt - 1] = NULL;
-			retVal = cocoasudo(executable, commandArgs, icon, prompt);
-			free(commandArgs);
+			
+            memcpy(commandArgs, argv + programArgsStartAt + 1, (argc - programArgsStartAt - 1) * sizeof(char**));
+			
+            commandArgs[argc - programArgsStartAt - 1] = NULL;
+			
+            retVal = cocoaSudo(executable, commandArgs, icon, prompt);
+			
+            free(commandArgs);
 			free(executable);
 		}
-		else
-		{
+		else {
 			fprintf(stderr, "Unable to find %s\n", argv[programArgsStartAt]);
-			usage(argv[0]);
+			
+            usage(argv[0]);
 		}
 	}
 
@@ -271,5 +271,6 @@ int main(int argc, char *argv[])
 	}
 	
 	[pool release];
+    
 	return retVal;
 }
