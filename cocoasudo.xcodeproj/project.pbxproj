@@ -121,7 +121,11 @@
 			isa = PBXProject;
 			buildConfigurationList = 1DEB927808733DD40010E9CD /* Build configuration list for PBXProject "cocoasudo" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
 			mainGroup = 08FB7794FE84155DC02AAC07 /* cocoasudo */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -157,7 +161,7 @@
 				GCC_PREFIX_HEADER = cocoasudo_Prefix.pch;
 				INSTALL_PATH = /usr/local/bin;
 				PRODUCT_NAME = cocoasudo;
-				SDKROOT = macosx10.4;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -172,7 +176,7 @@
 				GCC_PREFIX_HEADER = cocoasudo_Prefix.pch;
 				INSTALL_PATH = /usr/local/bin;
 				PRODUCT_NAME = cocoasudo;
-				SDKROOT = macosx10.4;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
