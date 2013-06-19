@@ -95,13 +95,15 @@ int cocoaSudo(char *executable, char *commandArgs[], char *icon, char *prompt) {
 	OSStatus status;
 	AuthorizationRef authRef;
 	
-	AuthorizationItem right = { "com.performant.cocoasudo", 0, NULL, 0 };
-	AuthorizationRights rightSet = { 1, &right };
+	AuthorizationItem right = {kAuthorizationRightExecute, 0, NULL, 0};
+	AuthorizationRights rightSet = {1, &right};
 	
 	AuthorizationEnvironment myAuthorizationEnvironment;
 	AuthorizationItem kAuthEnv[2];
+	myAuthorizationEnvironment.items = kAuthEnv;
+
+	AuthorizationFlags flags = kAuthorizationFlagDefaults;
 	
-    myAuthorizationEnvironment.items = kAuthEnv;
 	
 	if (prompt && icon) {
 		kAuthEnv[0].name = kAuthorizationEnvironmentPrompt;
@@ -136,13 +138,19 @@ int cocoaSudo(char *executable, char *commandArgs[], char *icon, char *prompt) {
 		myAuthorizationEnvironment.count = 0;
 	}
 	
-	if (AuthorizationCreate(NULL, &myAuthorizationEnvironment, kAuthorizationFlagDefaults, &authRef) != errAuthorizationSuccess) {
+	status = AuthorizationCreate(NULL, &myAuthorizationEnvironment, flags, &authRef);
+	
+	if (status != errAuthorizationSuccess) {
 		NSLog(@"Could not create authorization reference object.");
-        
 		status = errAuthorizationBadAddress;
 	}
 	else {
-		status = AuthorizationCopyRights(authRef, &rightSet, &myAuthorizationEnvironment, kAuthorizationFlagDefaults | kAuthorizationFlagPreAuthorize | kAuthorizationFlagInteractionAllowed | kAuthorizationFlagExtendRights, NULL);
+		flags = kAuthorizationFlagDefaults |
+			kAuthorizationFlagInteractionAllowed |
+			kAuthorizationFlagPreAuthorize |
+			kAuthorizationFlagExtendRights;
+
+		status = AuthorizationCopyRights(authRef, &rightSet, &myAuthorizationEnvironment, flags, NULL);
 	}
 
 	if (status == errAuthorizationSuccess) {
@@ -150,18 +158,19 @@ int cocoaSudo(char *executable, char *commandArgs[], char *icon, char *prompt) {
 		char buffer[1024];
 		int bytesRead;
 
-		status = AuthorizationExecuteWithPrivileges(authRef, executable, 0, commandArgs, &ioPipe);
+		flags = kAuthorizationFlagDefaults;
+		status = AuthorizationExecuteWithPrivileges(authRef, executable, flags, commandArgs, &ioPipe);
 
 		/* Just pipe processes' stdout to our stdout for now; hopefully can add stdin pipe later as well */
 		
-        for (;;) {
+        	for (;;) {
 			bytesRead = fread(buffer, sizeof(char), 1024, ioPipe);
 			
-            if (bytesRead < 1) {
-                break;
-            }
+            		if (bytesRead < 1) {
+                		break;
+            		}
 			
-            write(STDOUT_FILENO, buffer, bytesRead * sizeof(char));
+            		write(STDOUT_FILENO, buffer, bytesRead * sizeof(char));
 		}
 		
 		pid_t pid;
@@ -170,9 +179,9 @@ int cocoaSudo(char *executable, char *commandArgs[], char *icon, char *prompt) {
 		do {
 			pid = wait(&pidStatus);
 		} 
-        while (pid != -1);
+        	while (pid != -1);
 		
-        if (status == errAuthorizationSuccess) {
+        	if (status == errAuthorizationSuccess) {
 			retVal = 0;
 		}
 	}
@@ -180,10 +189,9 @@ int cocoaSudo(char *executable, char *commandArgs[], char *icon, char *prompt) {
 		AuthorizationFree(authRef, kAuthorizationFlagDestroyRights);
 		authRef = NULL;
 		
-        if (status != errAuthorizationCanceled) {
+        	if (status != errAuthorizationCanceled) {
 			// pre-auth failed
-			
-            NSLog(@"Pre-auth failed");
+			NSLog(@"Pre-auth failed");
 		}
 	}
 	
