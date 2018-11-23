@@ -7,11 +7,57 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		095B455221A831090092F1F3 /* NPTask.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 095B454621A830F90092F1F3 /* NPTask.framework */; };
 		6B5CDD62108D53C900F3F45A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B5CDD61108D53C900F3F45A /* Security.framework */; };
 		8DD76F9A0486AA7600D96B5E /* cocoasudo.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* cocoasudo.m */; settings = {ATTRIBUTES = (); }; };
 		8DD76F9C0486AA7600D96B5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08FB779EFE84155DC02AAC07 /* Foundation.framework */; };
 		8DD76F9F0486AA7600D96B5E /* cocoasudo.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C6859EA3029092ED04C91782 /* cocoasudo.1 */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		095B454521A830F90092F1F3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 095B453D21A830F90092F1F3 /* NPTask.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0966C5A6215DB1D0006B2DAA;
+			remoteInfo = NPTask;
+		};
+		095B454721A830F90092F1F3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 095B453D21A830F90092F1F3 /* NPTask.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0966C5C6215DB277006B2DAA;
+			remoteInfo = SMJobBlessHelper;
+		};
+		095B454921A830F90092F1F3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 095B453D21A830F90092F1F3 /* NPTask.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 092F04E9215E69BA00869C20;
+			remoteInfo = NPAuthenticator;
+		};
+		095B454B21A830F90092F1F3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 095B453D21A830F90092F1F3 /* NPTask.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0966C5D1215DB2D5006B2DAA;
+			remoteInfo = tester;
+		};
+		095B454D21A830F90092F1F3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 095B453D21A830F90092F1F3 /* NPTask.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0966C5AF215DB1D0006B2DAA;
+			remoteInfo = NPTaskTests;
+		};
+		095B454F21A831020092F1F3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 095B453D21A830F90092F1F3 /* NPTask.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 0966C5A5215DB1D0006B2DAA;
+			remoteInfo = NPTask;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		8DD76F9E0486AA7600D96B5E /* CopyFiles */ = {
@@ -29,6 +75,7 @@
 /* Begin PBXFileReference section */
 		08FB7796FE84155DC02AAC07 /* cocoasudo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = cocoasudo.m; sourceTree = "<group>"; };
 		08FB779EFE84155DC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		095B453D21A830F90092F1F3 /* NPTask.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = NPTask.xcodeproj; path = NPTask/NPTask.xcodeproj; sourceTree = "<group>"; };
 		32A70AAB03705E1F00C91783 /* cocoasudo_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cocoasudo_Prefix.pch; sourceTree = "<group>"; };
 		6B5CDD61108D53C900F3F45A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
 		8DD76FA10486AA7600D96B5E /* cocoasudo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = cocoasudo; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -40,6 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				095B455221A831090092F1F3 /* NPTask.framework in Frameworks */,
 				8DD76F9C0486AA7600D96B5E /* Foundation.framework in Frameworks */,
 				6B5CDD62108D53C900F3F45A /* Security.framework in Frameworks */,
 			);
@@ -51,10 +99,12 @@
 		08FB7794FE84155DC02AAC07 /* cocoasudo */ = {
 			isa = PBXGroup;
 			children = (
+				095B453D21A830F90092F1F3 /* NPTask.xcodeproj */,
 				08FB7795FE84155DC02AAC07 /* Source */,
 				C6859EA2029092E104C91782 /* Documentation */,
 				08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */,
 				1AB674ADFE9D54B511CA2CBB /* Products */,
+				095B455121A831090092F1F3 /* Frameworks */,
 			);
 			name = cocoasudo;
 			sourceTree = "<group>";
@@ -75,6 +125,25 @@
 				08FB779EFE84155DC02AAC07 /* Foundation.framework */,
 			);
 			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		095B453E21A830F90092F1F3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				095B454621A830F90092F1F3 /* NPTask.framework */,
+				095B454821A830F90092F1F3 /* npyl.NPTask.SMJobBlessHelper */,
+				095B454A21A830F90092F1F3 /* NPAuthenticator.app */,
+				095B454C21A830F90092F1F3 /* tester */,
+				095B454E21A830F90092F1F3 /* NPTaskTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		095B455121A831090092F1F3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		1AB674ADFE9D54B511CA2CBB /* Products */ = {
@@ -107,6 +176,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				095B455021A831020092F1F3 /* PBXTargetDependency */,
 			);
 			name = cocoasudo;
 			productInstallPath = "$(HOME)/bin";
@@ -131,12 +201,56 @@
 			);
 			mainGroup = 08FB7794FE84155DC02AAC07 /* cocoasudo */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 095B453E21A830F90092F1F3 /* Products */;
+					ProjectRef = 095B453D21A830F90092F1F3 /* NPTask.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				8DD76F960486AA7600D96B5E /* cocoasudo */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		095B454621A830F90092F1F3 /* NPTask.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = NPTask.framework;
+			remoteRef = 095B454521A830F90092F1F3 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		095B454821A830F90092F1F3 /* npyl.NPTask.SMJobBlessHelper */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = npyl.NPTask.SMJobBlessHelper;
+			remoteRef = 095B454721A830F90092F1F3 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		095B454A21A830F90092F1F3 /* NPAuthenticator.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = NPAuthenticator.app;
+			remoteRef = 095B454921A830F90092F1F3 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		095B454C21A830F90092F1F3 /* tester */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = tester;
+			remoteRef = 095B454B21A830F90092F1F3 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		095B454E21A830F90092F1F3 /* NPTaskTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = NPTaskTests.xctest;
+			remoteRef = 095B454D21A830F90092F1F3 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8DD76F990486AA7600D96B5E /* Sources */ = {
@@ -148,6 +262,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		095B455021A831020092F1F3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = NPTask;
+			targetProxy = 095B454F21A831020092F1F3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		1DEB927508733DD40010E9CD /* Debug */ = {

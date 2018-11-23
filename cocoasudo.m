@@ -24,6 +24,8 @@
 #include <Security/Authorization.h>
 #include <Security/AuthorizationTags.h>
 
+#include <NPTask/NPTask.h>
+
 char *addFileToPath(const char *path, const char *filename) {
 	char *outbuf;
 	char *lc;
@@ -198,6 +200,37 @@ int cocoaSudo(char *executable, char *commandArgs[], char *icon, char *prompt) {
 	return retVal;
 }
 
+/* use our own API which is up-to-date */
+int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *prompt) {
+    int argumentsCount = 0;
+    NSMutableArray *args = [NSMutableArray array];
+    
+    for (int i = 0; i < len; i++)
+    {
+        /* everytime we get an string-end increment argumentsCount */
+        if (*(commandArgs + i) == '\0')
+            argumentsCount++;
+    }
+    
+    for (int i = 0; i < argumentsCount; i++)
+    {
+        [args addObject:[NSString stringWithUTF8String:commandArgs[i]]];
+    }
+    
+    NSLog(@"%s", executable);
+    NSLog(@"%@", args);
+    
+    NSTask *task = [[NSTask alloc] init];
+    task.launchPath = [NSString stringWithUTF8String:executable];
+    task.arguments = args;
+    //task.currentDirectoryPath = NSHomeDirectory();
+    
+    [task launchAuthenticated];
+    [task waitUntilExit];
+    
+    return task.terminationStatus;
+}
+
 void usage(char *appNameFull) {
 	char *appName = strrchr(appNameFull, '/');
     
@@ -262,7 +295,9 @@ int main(int argc, char *argv[]) {
 			
             commandArgs[argc - programArgsStartAt - 1] = NULL;
 			
-            retVal = cocoaSudo(executable, commandArgs, icon, prompt);
+            //retVal = cocoaSudo(executable, commandArgs, icon, prompt);
+            int len = (argc - programArgsStartAt);
+            retVal = npylSudo(executable, commandArgs, len, icon, prompt);
 			
             free(commandArgs);
 			free(executable);
