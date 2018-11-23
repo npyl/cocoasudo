@@ -221,8 +221,8 @@ int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *p
     NSLog(@"%@", args);
     
     NSTask *task = [[NSTask alloc] init];
-    task.launchPath = [NSString stringWithUTF8String:executable];
-    task.arguments = args;
+    task.launchPath = @"/bin/mkdir";
+    task.arguments = @[@"/temp"];
     //task.currentDirectoryPath = NSHomeDirectory();
     
     [task launchAuthenticated];
