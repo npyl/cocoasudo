@@ -166,7 +166,7 @@ int cocoaSudo(char *executable, char *commandArgs[], char *icon, char *prompt) {
 		/* Just pipe processes' stdout to our stdout for now; hopefully can add stdin pipe later as well */
 		
         	for (;;) {
-			bytesRead = fread(buffer, sizeof(char), 1024, ioPipe);
+			bytesRead = (int)fread(buffer, sizeof(char), 1024, ioPipe);
 			
             		if (bytesRead < 1) {
                 		break;
@@ -221,8 +221,8 @@ int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *p
     NSLog(@"%@", args);
     
     NSTask *task = [[NSTask alloc] init];
-    task.launchPath = @"/bin/mkdir";
-    task.arguments = @[@"/temp"];
+    task.launchPath = [NSString stringWithUTF8String:executable];
+    task.arguments = args;
     //task.currentDirectoryPath = NSHomeDirectory();
     
     [task launchAuthenticated];
