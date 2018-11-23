@@ -1,0 +1,3 @@
+[submodule "NPTask"]
+	path = NPTask
+	url = https://github.com/npyl/NPTask
