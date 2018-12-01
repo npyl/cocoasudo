@@ -227,8 +227,13 @@ int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *p
     
     [task launchAuthenticated];
     [task waitUntilExit];
-    
-    return task.terminationStatus;
+  
+    return 0;
+//
+// XXX turns out, this line throws an exception
+// if the application has not been started....
+//
+//    return task.terminationStatus;
 }
 
 void usage(char *appNameFull) {
