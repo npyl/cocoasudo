@@ -24,7 +24,7 @@
 #include <Security/Authorization.h>
 #include <Security/AuthorizationTags.h>
 
-#include <NPTask/NPTask.h>
+#include <NPTask/NSAuthenticatedTask.h>
 
 char *addFileToPath(const char *path, const char *filename) {
 	char *outbuf;
@@ -92,114 +92,6 @@ char *which(const char *filename)
     return NULL;
 }
 
-int cocoaSudo(char *executable, char *commandArgs[], char *icon, char *prompt) {
-	int retVal = 1;
-	OSStatus status;
-	AuthorizationRef authRef;
-	
-	AuthorizationItem right = {kAuthorizationRightExecute, 0, NULL, 0};
-	AuthorizationRights rightSet = {1, &right};
-	
-	AuthorizationEnvironment myAuthorizationEnvironment;
-	AuthorizationItem kAuthEnv[2];
-	myAuthorizationEnvironment.items = kAuthEnv;
-
-	AuthorizationFlags flags = kAuthorizationFlagDefaults;
-	
-	
-	if (prompt && icon) {
-		kAuthEnv[0].name = kAuthorizationEnvironmentPrompt;
-		kAuthEnv[0].valueLength = strlen(prompt);
-		kAuthEnv[0].value = prompt;
-		kAuthEnv[0].flags = 0;
-		
-		kAuthEnv[1].name = kAuthorizationEnvironmentIcon;
-		kAuthEnv[1].valueLength = strlen(icon);
-		kAuthEnv[1].value = icon;
-		kAuthEnv[1].flags = 0;
-		
-		myAuthorizationEnvironment.count = 2;
-	}
-	else if (prompt) {
-		kAuthEnv[0].name = kAuthorizationEnvironmentPrompt;
-		kAuthEnv[0].valueLength = strlen(prompt);
-		kAuthEnv[0].value = prompt;
-		kAuthEnv[0].flags = 0;
-		
-		myAuthorizationEnvironment.count = 1;
-	}
-	else if (icon) {
-		kAuthEnv[0].name = kAuthorizationEnvironmentIcon;
-		kAuthEnv[0].valueLength = strlen(icon);
-		kAuthEnv[0].value = icon;
-		kAuthEnv[0].flags = 0;
-		
-		myAuthorizationEnvironment.count = 1;
-	}
-	else {
-		myAuthorizationEnvironment.count = 0;
-	}
-	
-	status = AuthorizationCreate(NULL, &myAuthorizationEnvironment, flags, &authRef);
-	
-	if (status != errAuthorizationSuccess) {
-		NSLog(@"Could not create authorization reference object.");
-		status = errAuthorizationBadAddress;
-	}
-	else {
-		flags = kAuthorizationFlagDefaults |
-			kAuthorizationFlagInteractionAllowed |
-			kAuthorizationFlagPreAuthorize |
-			kAuthorizationFlagExtendRights;
-
-		status = AuthorizationCopyRights(authRef, &rightSet, &myAuthorizationEnvironment, flags, NULL);
-	}
-
-	if (status == errAuthorizationSuccess) {
-		FILE *ioPipe;
-		char buffer[1024];
-		int bytesRead;
-
-		flags = kAuthorizationFlagDefaults;
-		status = AuthorizationExecuteWithPrivileges(authRef, executable, flags, commandArgs, &ioPipe);
-
-		/* Just pipe processes' stdout to our stdout for now; hopefully can add stdin pipe later as well */
-		
-        	for (;;) {
-			bytesRead = (int)fread(buffer, sizeof(char), 1024, ioPipe);
-			
-            		if (bytesRead < 1) {
-                		break;
-            		}
-			
-            		write(STDOUT_FILENO, buffer, bytesRead * sizeof(char));
-		}
-		
-		pid_t pid;
-		int pidStatus;
-        
-		do {
-			pid = wait(&pidStatus);
-		} 
-        	while (pid != -1);
-		
-        	if (status == errAuthorizationSuccess) {
-			retVal = 0;
-		}
-	}
-	else {
-		AuthorizationFree(authRef, kAuthorizationFlagDestroyRights);
-		authRef = NULL;
-		
-        	if (status != errAuthorizationCanceled) {
-			// pre-auth failed
-			NSLog(@"Pre-auth failed");
-		}
-	}
-	
-	return retVal;
-}
-
 /* use our own API which is up-to-date */
 int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *prompt) {
     int argumentsCount = 0;
@@ -220,20 +112,15 @@ int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *p
     NSLog(@"%s", executable);
     NSLog(@"%@", args);
     
-    NSTask *task = [[NSTask alloc] init];
+    NSAuthenticatedTask *task = [[NSAuthenticatedTask alloc] init];
     task.launchPath = [NSString stringWithUTF8String:executable];
     task.arguments = args;
-    //task.currentDirectoryPath = NSHomeDirectory();
+    task.currentDirectoryPath = NSHomeDirectory();
     
     [task launchAuthenticated];
     [task waitUntilExit];
   
-    return 0;
-//
-// XXX turns out, this line throws an exception
-// if the application has not been started....
-//
-//    return task.terminationStatus;
+    return task.terminationStatus;
 }
 
 void usage(char *appNameFull) {
@@ -300,7 +187,6 @@ int main(int argc, char *argv[]) {
 			
             commandArgs[argc - programArgsStartAt - 1] = NULL;
 			
-            //retVal = cocoaSudo(executable, commandArgs, icon, prompt);
             int len = (argc - programArgsStartAt);
             retVal = npylSudo(executable, commandArgs, len, icon, prompt);
 			
