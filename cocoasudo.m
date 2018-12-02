@@ -21,9 +21,6 @@
 
 #include <sys/stat.h>
 #include <unistd.h>
-#include <Security/Authorization.h>
-#include <Security/AuthorizationTags.h>
-
 #include <NPTask/NSAuthenticatedTask.h>
 
 char *addFileToPath(const char *path, const char *filename) {
