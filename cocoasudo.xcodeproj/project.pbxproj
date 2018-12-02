@@ -75,6 +75,7 @@
 /* Begin PBXFileReference section */
 		08FB7796FE84155DC02AAC07 /* cocoasudo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = cocoasudo.m; sourceTree = "<group>"; };
 		08FB779EFE84155DC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		0901DBB821B36882004B5D65 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		095B453D21A830F90092F1F3 /* NPTask.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = NPTask.xcodeproj; path = NPTask/NPTask.xcodeproj; sourceTree = "<group>"; };
 		32A70AAB03705E1F00C91783 /* cocoasudo_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cocoasudo_Prefix.pch; sourceTree = "<group>"; };
 		6B5CDD61108D53C900F3F45A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
@@ -99,6 +100,7 @@
 		08FB7794FE84155DC02AAC07 /* cocoasudo */ = {
 			isa = PBXGroup;
 			children = (
+				0901DBB821B36882004B5D65 /* README.md */,
 				095B453D21A830F90092F1F3 /* NPTask.xcodeproj */,
 				08FB7795FE84155DC02AAC07 /* Source */,
 				C6859EA2029092E104C91782 /* Documentation */,

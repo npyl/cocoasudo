@@ -19,8 +19,8 @@
 
 #import <Cocoa/Cocoa.h>
 
-#include <sys/stat.h>
 #include <unistd.h>
+#include <sys/stat.h>
 #include <NPTask/NSAuthenticatedTask.h>
 
 char *addFileToPath(const char *path, const char *filename) {
