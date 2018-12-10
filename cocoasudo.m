@@ -23,6 +23,19 @@
 #include <sys/stat.h>
 #include <NPTask/NSAuthenticatedTask.h>
 
+void printData(NSFileHandle *fh)
+{
+    NSData *data = [fh availableData];
+    if (data.length > 0)
+    {
+        /* if data is found, re-register for more data (and print) */
+        [fh waitForDataInBackgroundAndNotify];
+        NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        
+        NSLog(@"%@", str);
+    }
+};
+
 char *addFileToPath(const char *path, const char *filename) {
 	char *outbuf;
 	char *lc;
@@ -106,6 +119,7 @@ int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *p
         [args addObject:[NSString stringWithUTF8String:commandArgs[i]]];
     }
     
+    // XXX dbg
     NSLog(@"%s", executable);
     NSLog(@"%@", args);
     
@@ -113,6 +127,21 @@ int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *p
     task.launchPath = [NSString stringWithUTF8String:executable];
     task.arguments = args;
     task.currentDirectoryPath = NSHomeDirectory();
+    task.standardOutput = [NSPipe pipe];
+    task.standardError = [NSPipe pipe];
+    
+    NSFileHandle *outputHandle = [task.standardOutput fileHandleForReading];
+    NSFileHandle *errorHandle = [task.standardError fileHandleForReading];
+    
+    [outputHandle waitForDataInBackgroundAndNotify];
+    [errorHandle waitForDataInBackgroundAndNotify];
+
+    [outputHandle setReadabilityHandler:^(NSFileHandle * _Nonnull fh) {
+        printData(fh);
+    }];
+    [errorHandle setReadabilityHandler:^(NSFileHandle * _Nonnull fh) {
+        printData(fh);
+    }];
     
     [task launchAuthenticated];
     [task waitUntilExit];
