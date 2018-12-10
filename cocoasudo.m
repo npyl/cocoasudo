@@ -114,10 +114,12 @@ int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *p
             argumentsCount++;
     }
     
-    for (int i = 0; i < argumentsCount; i++)
-    {
-        [args addObject:[NSString stringWithUTF8String:commandArgs[i]]];
-    }
+    
+    if (argumentsCount >= 2)    // we always have a spare \0 => (>= 2)
+        for (int i = 0; i < argumentsCount; i++)
+        {
+            [args addObject:[NSString stringWithUTF8String:commandArgs[i]]];
+        }
     
     // XXX dbg
     NSLog(@"%s", executable);
