@@ -102,6 +102,27 @@ char *which(const char *filename)
     return NULL;
 }
 
+NSString *executableIcon(NSString *executable)
+{
+    /*
+     * Check if it is a bundle:
+     */
+    NSString *supposedBundlePath = [[[executable stringByDeletingLastPathComponent] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
+
+    NSBundle *bundle = [NSBundle bundleWithPath:supposedBundlePath];
+
+    if (!bundle) // Ok, its a bundle; What kind of bundle?
+    {
+//        return [NSImage imageNamed:NSImageNameApplicationIcon].
+    }
+    else    // its an executable
+    {
+        return [[NSBundle mainBundle] pathForImageResource:@"ExecutableBinary_16x16"];
+    }
+    
+    return nil;
+}
+
 /* use our own API which is up-to-date */
 int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *prompt) {
     int argumentsCount = 0;
@@ -114,7 +135,6 @@ int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *p
             argumentsCount++;
     }
     
-    
     if (argumentsCount >= 2)    // we always have a spare \0 => (>= 2)
         for (int i = 0; i < argumentsCount; i++)
         {
@@ -122,10 +142,11 @@ int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *p
         }
     
     // XXX dbg
-    NSLog(@"%s", executable);
-    NSLog(@"%@", args);
+//    NSLog(@"%s", executable);
+//    NSLog(@"%@", args);
     
     NSAuthenticatedTask *task = [[NSAuthenticatedTask alloc] init];
+    task.icon = executableIcon([NSString stringWithUTF8String:executable]);
     task.launchPath = [NSString stringWithUTF8String:executable];
     task.arguments = args;
     task.currentDirectoryPath = NSHomeDirectory();
