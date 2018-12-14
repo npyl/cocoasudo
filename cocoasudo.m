@@ -126,6 +126,7 @@ NSString *executableIcon(NSString *executable)
 /* use our own API which is up-to-date */
 int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *prompt) {
     int argumentsCount = 0;
+    NSString *_executable = [NSString stringWithUTF8String:executable];
     NSMutableArray *args = [NSMutableArray array];
     
     for (int i = 0; i < len; i++)
@@ -144,10 +145,10 @@ int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *p
     // XXX dbg
 //    NSLog(@"%s", executable);
 //    NSLog(@"%@", args);
-    
+
     NSAuthenticatedTask *task = [[NSAuthenticatedTask alloc] init];
-    task.icon = executableIcon([NSString stringWithUTF8String:executable]);
-    task.launchPath = [NSString stringWithUTF8String:executable];
+    task.icon = executableIcon(_executable);
+    task.launchPath = _executable;
     task.arguments = args;
     task.currentDirectoryPath = NSHomeDirectory();
     task.standardOutput = [NSPipe pipe];
