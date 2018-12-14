@@ -165,8 +165,6 @@ void usage(char *appNameFull) {
 }
 
 int main(int argc, char *argv[]) {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
 	int retVal = 1;
 	int programArgsStartAt = 1;
 	char *icon = NULL;
@@ -231,8 +229,6 @@ int main(int argc, char *argv[]) {
 	if (prompt) {
 		free(prompt);
 	}
-	
-	[pool release];
-    
+
 	return retVal;
 }
