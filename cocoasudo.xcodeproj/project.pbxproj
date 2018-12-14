@@ -13,6 +13,7 @@
 		095862F821C3EA99000EBD6A /* NPTask.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 095862EA21C3EA73000EBD6A /* NPTask.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		095862FE21C3EB93000EBD6A /* cocoasudo.1 in Copy Man Page */ = {isa = PBXBuildFile; fileRef = 095862FC21C3EB8B000EBD6A /* cocoasudo.1 */; };
 		0958630621C3F41C000EBD6A /* ExecutableBinary_16x16.png in Resources */ = {isa = PBXBuildFile; fileRef = 0958630121C3F41C000EBD6A /* ExecutableBinary_16x16.png */; };
+		0958632C21C45178000EBD6A /* cocoasudo.sh in Resources */ = {isa = PBXBuildFile; fileRef = 0958632B21C45178000EBD6A /* cocoasudo.sh */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,6 +95,7 @@
 		095862F921C3EAE5000EBD6A /* cocoasudo_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cocoasudo_Prefix.pch; sourceTree = SOURCE_ROOT; };
 		095862FC21C3EB8B000EBD6A /* cocoasudo.1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.man; name = cocoasudo.1; path = Documentation/cocoasudo.1; sourceTree = SOURCE_ROOT; };
 		0958630121C3F41C000EBD6A /* ExecutableBinary_16x16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ExecutableBinary_16x16.png; sourceTree = "<group>"; };
+		0958632B21C45178000EBD6A /* cocoasudo.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = cocoasudo.sh; path = Resources/cocoasudo.sh; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +137,7 @@
 				095862D621C3E9B0000EBD6A /* Info.plist */,
 				095862F921C3EAE5000EBD6A /* cocoasudo_Prefix.pch */,
 				095862DF21C3EA55000EBD6A /* cocoasudo.m */,
+				0958632B21C45178000EBD6A /* cocoasudo.sh */,
 			);
 			path = cocoasudo;
 			sourceTree = "<group>";
@@ -272,6 +275,7 @@
 			files = (
 				095862D221C3E9B0000EBD6A /* Assets.xcassets in Resources */,
 				0958630621C3F41C000EBD6A /* ExecutableBinary_16x16.png in Resources */,
+				0958632C21C45178000EBD6A /* cocoasudo.sh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
