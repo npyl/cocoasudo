@@ -11,6 +11,7 @@
 		095862E021C3EA55000EBD6A /* cocoasudo.m in Sources */ = {isa = PBXBuildFile; fileRef = 095862DF21C3EA55000EBD6A /* cocoasudo.m */; };
 		095862F621C3EA8A000EBD6A /* NPTask.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 095862EA21C3EA73000EBD6A /* NPTask.framework */; };
 		095862F821C3EA99000EBD6A /* NPTask.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 095862EA21C3EA73000EBD6A /* NPTask.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		095862FE21C3EB93000EBD6A /* cocoasudo.1 in Copy Man Page */ = {isa = PBXBuildFile; fileRef = 095862FC21C3EB8B000EBD6A /* cocoasudo.1 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,17 @@
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		095862FB21C3EB22000EBD6A /* Copy Man Page */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = /usr/share/man/man1;
+			dstSubfolderSpec = 0;
+			files = (
+				095862FE21C3EB93000EBD6A /* cocoasudo.1 in Copy Man Page */,
+			);
+			name = "Copy Man Page";
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -78,6 +90,8 @@
 		095862D621C3E9B0000EBD6A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		095862DF21C3EA55000EBD6A /* cocoasudo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = cocoasudo.m; sourceTree = SOURCE_ROOT; };
 		095862E121C3EA73000EBD6A /* NPTask.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = NPTask.xcodeproj; path = NPTask/NPTask.xcodeproj; sourceTree = "<group>"; };
+		095862F921C3EAE5000EBD6A /* cocoasudo_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cocoasudo_Prefix.pch; sourceTree = SOURCE_ROOT; };
+		095862FC21C3EB8B000EBD6A /* cocoasudo.1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.man; name = cocoasudo.1; path = Documentation/cocoasudo.1; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				095862E121C3EA73000EBD6A /* NPTask.xcodeproj */,
+				095862FF21C3EBB0000EBD6A /* Documentation */,
 				095862CA21C3E9AF000EBD6A /* cocoasudo */,
 				095862C921C3E9AF000EBD6A /* Products */,
 				095862F521C3EA8A000EBD6A /* Frameworks */,
@@ -113,9 +128,10 @@
 		095862CA21C3E9AF000EBD6A /* cocoasudo */ = {
 			isa = PBXGroup;
 			children = (
-				095862DF21C3EA55000EBD6A /* cocoasudo.m */,
 				095862D121C3E9B0000EBD6A /* Assets.xcassets */,
 				095862D621C3E9B0000EBD6A /* Info.plist */,
+				095862F921C3EAE5000EBD6A /* cocoasudo_Prefix.pch */,
+				095862DF21C3EA55000EBD6A /* cocoasudo.m */,
 			);
 			path = cocoasudo;
 			sourceTree = "<group>";
@@ -139,6 +155,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		095862FF21C3EBB0000EBD6A /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+				095862FC21C3EB8B000EBD6A /* cocoasudo.1 */,
+			);
+			path = Documentation;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -150,6 +174,7 @@
 				095862C521C3E9AF000EBD6A /* Frameworks */,
 				095862C621C3E9AF000EBD6A /* Resources */,
 				095862F721C3EA8E000EBD6A /* Copy Frameworks */,
+				095862FB21C3EB22000EBD6A /* Copy Man Page */,
 			);
 			buildRules = (
 			);
