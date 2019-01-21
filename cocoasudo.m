@@ -120,10 +120,6 @@ int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *p
         {
             [args addObject:[NSString stringWithUTF8String:commandArgs[i]]];
         }
-    
-    // XXX dbg
-//    NSLog(@"%s", executable);
-//    NSLog(@"%@", args);
 
     NSAuthenticatedTask *task = [[NSAuthenticatedTask alloc] init];
     if (icon)
@@ -147,7 +143,7 @@ int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *p
         printData(fh);
     }];
     
-    [task launchAuthenticated];
+    [task launchAuthorized];
     [task waitUntilExit];
   
     return task.terminationStatus;
