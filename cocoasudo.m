@@ -17,11 +17,10 @@
 //  limitations under the License.
 //
 
+#import <unistd.h>
+#import <sys/stat.h>
 #import <Cocoa/Cocoa.h>
-
-#include <unistd.h>
-#include <sys/stat.h>
-#include <NPTask/NSAuthenticatedTask.h>
+#import <NPTask/NSAuthenticatedTask.h>
 
 void printData(NSFileHandle *fh)
 {
@@ -103,7 +102,7 @@ char *which(const char *filename)
 }
 
 /* use our own API which is up-to-date */
-int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *prompt) {
+int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *prompt, NSASession sessionID) {
     int argumentsCount = 0;
     NSString *_executable = [NSString stringWithUTF8String:executable];
     NSMutableArray *args = [NSMutableArray array];
@@ -115,7 +114,7 @@ int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *p
             argumentsCount++;
     }
     
-    if (argumentsCount >= 2)    // we always have a spare \0 => (>= 2)
+    if (argumentsCount > 0)
         for (int i = 0; i < argumentsCount; i++)
         {
             [args addObject:[NSString stringWithUTF8String:commandArgs[i]]];
@@ -143,7 +142,7 @@ int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *p
         printData(fh);
     }];
     
-    [task launchAuthorized];
+    [task launchAuthorizedWithSession:sessionID];
     [task waitUntilExit];
   
     return task.terminationStatus;
@@ -167,6 +166,7 @@ int main(int argc, char *argv[]) {
 	int programArgsStartAt = 1;
 	char *icon = NULL;
 	char *prompt = NULL;
+    NSASession sessionID = NSA_NEW_SESSION; /* new session (If nothing is passed default to that.) */
 
 	for (; programArgsStartAt < argc; programArgsStartAt++) {
 		if (!strncmp("--icon=", argv[programArgsStartAt], 7)) {
@@ -186,6 +186,10 @@ int main(int argc, char *argv[]) {
 			
             prompt = newPrompt;
 		}
+        else if (!strncmp("--sessid=", argv[programArgsStartAt], 9))
+        {
+            sscanf(argv[programArgsStartAt], "--sessid=%li", &sessionID);
+        }
 		else {
 			break;
 		}
@@ -212,7 +216,7 @@ int main(int argc, char *argv[]) {
             commandArgs[argc - programArgsStartAt - 1] = NULL;
 			
             int len = (argc - programArgsStartAt);
-            retVal = npylSudo(executable, commandArgs, len, icon, prompt);
+            retVal = npylSudo(executable, commandArgs, len, icon, prompt, sessionID);
 			
             free(commandArgs);
 			free(executable);
