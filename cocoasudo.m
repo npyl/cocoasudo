@@ -122,7 +122,7 @@ int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *p
 
     NSAuthenticatedTask *task = [[NSAuthenticatedTask alloc] init];
     if (icon) task.icon = [[NSImage alloc] initWithContentsOfFile:[NSString stringWithUTF8String:icon]];
-    task.text = [NSString stringWithUTF8String:prompt];
+    if (prompt) task.text = [NSString stringWithUTF8String:prompt];
     task.launchPath = _executable;
     task.arguments = args;
     task.currentDirectoryPath = NSHomeDirectory();
