@@ -36,68 +36,67 @@ void printData(NSFileHandle *fh)
 };
 
 char *addFileToPath(const char *path, const char *filename) {
-	char *outbuf;
-	char *lc;
-
-	lc = (char *)path + strlen(path) - 1;
-	
+    char *outbuf;
+    char *lc;
+    
+    lc = (char *)path + strlen(path) - 1;
     if (lc < path || *lc != '/') {
-		lc = NULL;
-	}
+        lc = NULL;
+    }
     
-	while (*filename == '/') {
-		filename++;
-	}
+    while (*filename == '/') {
+        filename++;
+    }
     
-	outbuf = malloc(strlen(path) + strlen(filename) + 1 + (lc == NULL ? 1 : 0));
-	
+    outbuf = malloc(strlen(path) + strlen(filename) + 1 + (lc == NULL ? 1 : 0));
+    
     sprintf(outbuf, "%s%s%s", path, (lc == NULL) ? "/" : "", filename);
-	
-	return outbuf;
+    
+    return outbuf;
 }
 
 int isExecFile(const char *name) {
 	struct stat s;
-    
+
 	return (!access(name, X_OK) && !stat(name, &s) && S_ISREG(s.st_mode));
 }
 
 char *which(const char *filename)
 {
-	char *path, *p, *n;
-	
-	path = getenv("PATH");
-	
-    if (!path) {
-		return NULL;
-	}
-
-	p = path = strdup(path);
-	
-    while (p) {
-		n = strchr(p, ':');
-		
-        if (n) {
-			*n++ = '\0';
-		}
-        
-		if (*p != '\0') {
-			p = addFileToPath(p, filename);
-            
-			if (isExecFile(p)) {
-				free(path);
-				
-                return p;
-			}
-            
-			free(p);
-		}
-        
-		p = n;
-	}
+    char *path, *p, *n;
     
-	free(path);
-	
+    path = getenv("PATH");
+    
+    if (!path) {
+        return NULL;
+    }
+    
+    p = path = strdup(path);
+    
+    while (p) {
+        n = strchr(p, ':');
+        
+        if (n) {
+            *n++ = '\0';
+        }
+        
+        if (*p != '\0') {
+            p = addFileToPath(p, filename);
+            
+            if (isExecFile(p)) {
+                free(path);
+                
+                return p;
+            }
+            
+            free(p);
+        }
+        
+        p = n;
+    }
+    
+    free(path);
+    
     return NULL;
 }
 
@@ -119,7 +118,7 @@ int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *p
         {
             [args addObject:[NSString stringWithUTF8String:commandArgs[i]]];
         }
-
+    
     NSAuthenticatedTask *task = [[NSAuthenticatedTask alloc] init];
     if (icon) task.icon = [[NSImage alloc] initWithContentsOfFile:[NSString stringWithUTF8String:icon]];
     if (prompt) task.text = [NSString stringWithUTF8String:prompt];
@@ -134,7 +133,7 @@ int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *p
     
     [outputHandle waitForDataInBackgroundAndNotify];
     [errorHandle waitForDataInBackgroundAndNotify];
-
+    
     [outputHandle setReadabilityHandler:^(NSFileHandle * _Nonnull fh) {
         printData(fh);
     }];
@@ -144,100 +143,100 @@ int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *p
     
     [task launchAuthorizedWithSession:sessionID];
     [task waitUntilExit];
-  
+    
     return task.terminationStatus;
 }
 
 void usage(char *appNameFull) {
-	char *appName = strrchr(appNameFull, '/');
+    char *appName = strrchr(appNameFull, '/');
     
-	if (appName == NULL) {
-		appName = appNameFull;
-	}
-	else {
-		appName++;
-	}
+    if (appName == NULL) {
+        appName = appNameFull;
+    }
+    else {
+        appName++;
+    }
     
-	fprintf(stderr, "usage: %s [--icon=icon.tiff] [--prompt=prompt...] command\n  --icon=[filename]: optional argument to specify a custom icon\n  --prompt=[prompt]: optional argument to specify a custom prompt\n", appName);
+    fprintf(stderr, "usage: %s [--icon=icon.tiff] [--prompt=prompt...] command\n  --icon=[filename]: optional argument to specify a custom icon\n  --prompt=[prompt]: optional argument to specify a custom prompt\n", appName);
 }
 
 int main(int argc, char *argv[]) {
-	int retVal = 1;
-	int programArgsStartAt = 1;
-	char *icon = NULL;
-	char *prompt = NULL;
+    int retVal = 1;
+    int programArgsStartAt = 1;
+    char *icon = NULL;
+    char *prompt = NULL;
     NSASession sessionID = NSA_NEW_SESSION; /* new session (If nothing is passed default to that.) */
-
-	for (; programArgsStartAt < argc; programArgsStartAt++) {
-		if (!strncmp("--icon=", argv[programArgsStartAt], 7)) {
-			icon = argv[programArgsStartAt] + 7;
-		}
-		else if (!strncmp("--prompt=", argv[programArgsStartAt], 9)) {
-			prompt = argv[programArgsStartAt] + 9;
-			
-            size_t promptLen = strlen(prompt);
-			char *newPrompt = malloc(sizeof(char) * (promptLen + 2));
+    
+    for (; programArgsStartAt < argc; programArgsStartAt++) {
+        if (!strncmp("--icon=", argv[programArgsStartAt], 7)) {
+            icon = argv[programArgsStartAt] + 7;
+        }
+        else if (!strncmp("--prompt=", argv[programArgsStartAt], 9)) {
+            prompt = argv[programArgsStartAt] + 9;
             
-			strcpy(newPrompt, prompt);
-			
+            size_t promptLen = strlen(prompt);
+            char *newPrompt = malloc(sizeof(char) * (promptLen + 2));
+            
+            strcpy(newPrompt, prompt);
+            
             newPrompt[promptLen] = '\n';
-			newPrompt[promptLen + 1] = '\n';
-			newPrompt[promptLen + 2] = '\0';
-			
+            newPrompt[promptLen + 1] = '\n';
+            newPrompt[promptLen + 2] = '\0';
+            
             prompt = newPrompt;
-		}
+        }
         else if (!strncmp("--sessid=", argv[programArgsStartAt], 9))
         {
             sscanf(argv[programArgsStartAt], "--sessid=%li", &sessionID);
         }
-		else {
-			break;
-		}
-	}
-
-	if (programArgsStartAt >= argc) {
-		usage(argv[0]);
-	}
-	else {
-		char *executable;
-
-		if (strchr(argv[programArgsStartAt], '/')) {
-			executable = isExecFile(argv[programArgsStartAt]) ? strdup(argv[programArgsStartAt]) : NULL;
-		}
-		else {
-			executable = which(argv[programArgsStartAt]);
-		}
-
-		if (executable) {
-			char **commandArgs = malloc((argc - programArgsStartAt) * sizeof(char**));
-			
+        else {
+            break;
+        }
+    }
+    
+    if (programArgsStartAt >= argc) {
+        usage(argv[0]);
+    }
+    else {
+        char *executable;
+        
+        if (strchr(argv[programArgsStartAt], '/')) {
+            executable = isExecFile(argv[programArgsStartAt]) ? strdup(argv[programArgsStartAt]) : NULL;
+        }
+        else {
+            executable = which(argv[programArgsStartAt]);
+        }
+        
+        if (executable) {
+            char **commandArgs = malloc((argc - programArgsStartAt) * sizeof(char**));
+            
             memcpy(commandArgs, argv + programArgsStartAt + 1, (argc - programArgsStartAt - 1) * sizeof(char**));
-			
+            
             commandArgs[argc - programArgsStartAt - 1] = NULL;
-			
+            
             int len = (argc - programArgsStartAt);
             retVal = npylSudo(executable, commandArgs, len, icon, prompt, sessionID);
-			
+            
             free(commandArgs);
-			free(executable);
-		}
-		else {
-			fprintf(stderr, "Unable to find %s\n", argv[programArgsStartAt]);
-			
+            free(executable);
+        }
+        else {
+            fprintf(stderr, "Unable to find %s\n", argv[programArgsStartAt]);
+            
             usage(argv[0]);
-		}
-	}
-
-	if (prompt) {
-		free(prompt);
-	}
-
+        }
+    }
+    
+    if (prompt) {
+        free(prompt);
+    }
+    
     /*
      * After every cocoasudo execution return SessionID;
      * it should be read by a caller in order to be used
      * later in another cocoasudo call.
      */
     printf("SessionID = %li\n", sessionID);
-
-	return retVal;
+    
+    return retVal;
 }
