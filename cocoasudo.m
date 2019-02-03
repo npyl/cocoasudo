@@ -165,7 +165,7 @@ int main(int argc, char *argv[]) {
     int programArgsStartAt = 1;
     char *icon = NULL;
     char *prompt = NULL;
-    NSASession sessionID = NSA_NEW_SESSION; /* new session (If nothing is passed default to that.) */
+    NSASession sessionID = NSA_SESSION_NEW; /* new session (If nothing is passed default to that.) */
     
     for (; programArgsStartAt < argc; programArgsStartAt++) {
         if (!strncmp("--icon=", argv[programArgsStartAt], 7)) {
