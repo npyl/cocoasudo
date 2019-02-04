@@ -157,7 +157,7 @@ void usage(char *appNameFull) {
         appName++;
     }
     
-    fprintf(stderr, "usage: %s [--icon=icon.tiff] [--prompt=prompt...] command\n  --icon=[filename]: optional argument to specify a custom icon\n  --prompt=[prompt]: optional argument to specify a custom prompt\n", appName);
+    fprintf(stderr, "usage: %s [--icon=icon.tiff] [--prompt=prompt...] [--sessid=session_idnum] command\n  --icon=[filename]: optional argument to specify a custom icon\n  --prompt=[prompt]: optional argument to specify a custom prompt\n  --sessid=[sessid]: optional argument to specify the already-authenticated SESSION ID (a number) to which we should bind this cocoasudo call.\n", appName);
 }
 
 int main(int argc, char *argv[]) {
