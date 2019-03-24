@@ -13,3 +13,9 @@ Theoretically, this project is ready, though NSAuthenticatedTask is not...  This
 ## LICENCE
 
 See [license.txt](license.txt)
+
+## SUPPORTING 💰
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NSV636CUWX754)
+
+[![Become a Patron!](http://npyl.github.io/img/become_a_patron_button.png)](https://www.patreon.com/bePatron?u=11783784)
