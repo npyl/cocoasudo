@@ -4,6 +4,9 @@
 //  Created by Aaron Kardell on 10/19/2009.
 //  Copyright 2009 Performant Design, LLC. All rights reserved.
 //
+//  Ported to new authentication APIs by npyl.
+//  Copyright 2019 npyl. All rights reserved.
+//
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
 //  You may obtain a copy of the License at
@@ -31,7 +34,7 @@ void printData(NSFileHandle *fh)
         [fh waitForDataInBackgroundAndNotify];
         NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         
-        NSLog(@"%@", str);
+        printf("%s", str.UTF8String);
     }
 };
 
