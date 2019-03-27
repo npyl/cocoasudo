@@ -130,17 +130,11 @@ int npylSudo(char *executable, char *commandArgs[], int len, char *icon, char *p
     task.currentDirectoryPath = NSHomeDirectory();
     task.standardOutput = [NSPipe pipe];
     task.standardError = [NSPipe pipe];
-    
-    NSFileHandle *outputHandle = [task.standardOutput fileHandleForReading];
-    NSFileHandle *errorHandle = [task.standardError fileHandleForReading];
-    
-    [outputHandle waitForDataInBackgroundAndNotify];
-    [errorHandle waitForDataInBackgroundAndNotify];
-    
-    [outputHandle setReadabilityHandler:^(NSFileHandle * _Nonnull fh) {
+
+    [[task.standardOutput fileHandleForReading] setReadabilityHandler:^(NSFileHandle * _Nonnull fh) {
         printData(fh);
     }];
-    [errorHandle setReadabilityHandler:^(NSFileHandle * _Nonnull fh) {
+    [[task.standardError fileHandleForReading] setReadabilityHandler:^(NSFileHandle * _Nonnull fh) {
         printData(fh);
     }];
     
